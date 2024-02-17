@@ -27,6 +27,8 @@
         <resteasy.version>6.2.4.Final</resteasy.version>
         <liquibase.version>4.16.1</liquibase.version>
         <infinispan.version>14.0.6.Final</infinispan.version>
+        <springdoc.version>2.2.0</springdoc.version>
+        <model.mapper.version>3.1.0</model.mapper.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -66,6 +68,19 @@
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-rest-admin-ui-ext</artifactId>
                 <version>${keycloak.version}</version>
+            </dependency>
+
+            <!-- Swagger -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+                <version>${model.mapper.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
