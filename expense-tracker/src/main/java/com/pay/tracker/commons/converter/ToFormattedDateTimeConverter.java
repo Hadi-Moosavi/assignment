@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 @Slf4j
-public class ToFormattedDateTimeConverter extends JsonSerializer<LocalDateTime> implements Converter<LocalDateTime, Long> {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+public class ToFormattedDateTimeConverter extends JsonSerializer<LocalDateTime> implements Converter<LocalDateTime, String> {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
     public void serialize(LocalDateTime dateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         try {
@@ -27,7 +27,7 @@ public class ToFormattedDateTimeConverter extends JsonSerializer<LocalDateTime> 
     }
 
     @Override
-    public Long convert(LocalDateTime source) {
-        return Long.valueOf(source.format(formatter));
+    public String convert(LocalDateTime source) {
+        return source.format(formatter);
     }
 }

@@ -1,5 +1,9 @@
 package com.pay.tracker.income.api;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pay.tracker.commons.converter.ToFormattedDateTimeConverter;
+import com.pay.tracker.commons.converter.ToLocalDateTimeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -25,12 +29,14 @@ public class IncomeDTO {
     private Long categoryId;
 
     @NotNull
-    @Schema(description = "Income value", example = "5000")
-    private Long value;
+    @Schema(description = "Income amount", example = "5000")
+    private Long amount;
 
     @Schema(description = "Income description", example = "2", nullable = true)
     private String description;
 
-    @Schema(description = "Transaction date in format of yyyyMMdd HHmmSS", example = "20240218231020", nullable = true)
+    @JsonSerialize(using = ToFormattedDateTimeConverter.class)
+    @JsonDeserialize(using = ToLocalDateTimeConverter.class)
+    @Schema(description = "Transaction date in format of yyyy-MM-dd HH:mm:SS", example = "20240218231020", nullable = true)
     private LocalDateTime date;
 }

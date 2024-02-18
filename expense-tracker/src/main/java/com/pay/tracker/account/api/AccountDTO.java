@@ -20,6 +20,7 @@ public class AccountDTO {
     private String name;
 
     @Schema(description = "Account Initial Balance", example = "100000", minimum = "0")
+    @NotNull
     @Min(0)
     private Long initialBalance;
 }

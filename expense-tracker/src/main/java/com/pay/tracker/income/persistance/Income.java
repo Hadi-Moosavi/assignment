@@ -24,7 +24,7 @@ public class Income {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    private Long value;
+    private Long amount;
     private String description;
     private LocalDateTime date;
 

@@ -35,6 +35,12 @@ public class IncomeServiceImpl implements IncomeService {
     @Override
     @Transactional
     public IncomeResponseDTO saveIncome(IncomeDTO dto, User user) {
+        var income = buildModel(dto, user);
+        var savedModel = incomeRepository.save(income);
+        return modelMapper.map(savedModel, IncomeResponseDTO.class);
+    }
+
+    private Income buildModel(IncomeDTO dto, User user) {
         Income income;
         if (dto.getId() != null) {
             income = getAndCheckIncome(dto.getId(), user);
@@ -42,17 +48,16 @@ public class IncomeServiceImpl implements IncomeService {
             income = new Income();
             income.setUserId(user.getId());
         }
-        income.setDescription(dto.getDescription());
-        income.setValue(dto.getValue());
-        income.setDate(dto.getDate() == null ? LocalDateTime.now() : dto.getDate());
         Category category = categoryService.getAndCheckCategory(dto.getCategoryId(), user);
         if (category.getType() != TransactionTypeEnum.INCOME) {
             throw new BusinessException("Selected category type is not for incomes");
         }
         income.setCategory(category);
         income.setAccount(accountService.getAndCheckAccount(dto.getAccountId(), user));
-        Income savedModel = incomeRepository.save(income);
-        return modelMapper.map(savedModel, IncomeResponseDTO.class);
+        income.setDescription(dto.getDescription());
+        income.setAmount(dto.getAmount());
+        income.setDate(dto.getDate() == null ? LocalDateTime.now() : dto.getDate());
+        return income;
     }
 
     @Override
