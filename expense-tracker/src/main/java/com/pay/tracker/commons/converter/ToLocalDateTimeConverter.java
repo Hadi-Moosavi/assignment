@@ -14,12 +14,12 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 @Slf4j
-public class FormattedToLocalDateTimeConverter extends JsonDeserializer<LocalDateTime> implements Converter<Long, LocalDateTime> {
+public class ToLocalDateTimeConverter extends JsonDeserializer<LocalDateTime> implements Converter<Long, LocalDateTime> {
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     @Override
-    public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
         try {
             return this.convert(jsonParser.getValueAsLong());
         } catch (Exception e) {
