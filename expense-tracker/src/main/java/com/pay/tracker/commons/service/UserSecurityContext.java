@@ -1,6 +1,6 @@
 package com.pay.tracker.commons.service;
 
-import com.pay.tracker.commons.model.ErrorException;
+import com.pay.tracker.commons.model.BusinessException;
 import com.pay.tracker.commons.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -16,7 +16,7 @@ public class UserSecurityContext {
         var name = (String) claims.get("preferred_username");
         var id = (Long) claims.get("user-id");
         if (name == null || id == null) {
-            throw new ErrorException("Invalid user info");
+            throw new BusinessException("Invalid user info");
         } else return new User(id, name);
     }
 
@@ -25,7 +25,7 @@ public class UserSecurityContext {
         try {
             authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         } catch (Exception ex) {
-            throw new ErrorException("Invalid token");
+            throw new BusinessException("Invalid token");
         }
         return authentication;
     }

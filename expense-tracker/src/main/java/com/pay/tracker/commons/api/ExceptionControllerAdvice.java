@@ -1,7 +1,7 @@
 package com.pay.tracker.commons.api;
 
 
-import com.pay.tracker.commons.model.ErrorException;
+import com.pay.tracker.commons.model.BusinessException;
 import com.pay.tracker.commons.model.ReactionTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
-    @ExceptionHandler(ErrorException.class)
-    public ResponseEntity<ResponseDTO<?>> handle(ErrorException ex) {
-        log.info("ErrorException exception happened: {}", ex.getMessage());
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ResponseDTO<?>> handle(BusinessException ex) {
+        log.info("Error exception happened: {}", ex.getMessage());
         var dto = new ResponseDTO<>(ex.getMessage(), ReactionTypeEnum.ERROR.getValue());
         return new ResponseEntity<>(dto, HttpStatus.NOT_ACCEPTABLE);
     }
