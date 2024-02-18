@@ -18,7 +18,7 @@ public class ToFormattedDateTimeConverter extends JsonSerializer<LocalDateTime> 
     @Override
     public void serialize(LocalDateTime dateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         try {
-            jsonGenerator.writeNumber(convert(dateTime));
+            jsonGenerator.writeString(convert(dateTime));
         }
         catch (Exception e){
             log.error("error when formatting localDateTime");
