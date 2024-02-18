@@ -29,6 +29,9 @@ public class AccountServiceImpl implements AccountService {
         if (dto.getId() != null) {
             account = findAndUpdateAccount(dto, user);
         } else {
+            if (accountRepository.existsByUserIdAndName(user.getId(), dto.getName())) {
+                throw new BusinessException("Duplicate category name");
+            }
             account = modelMapper.map(dto, Account.class);
             account.setUserId(user.getId());
             account.setActive(true);
@@ -65,7 +68,8 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    private Account getAndCheckAccount(Long id, User user) {
+    @Override
+    public Account getAndCheckAccount(Long id, User user) {
         Account account;
         account = accountRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
         if (!user.getId().equals(account.getUserId())) {
