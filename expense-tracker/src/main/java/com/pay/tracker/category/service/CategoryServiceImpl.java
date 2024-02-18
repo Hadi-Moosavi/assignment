@@ -47,6 +47,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (dto.getId() != null) {
             category = findAndUpdateCategory(dto, user);
         } else {
+            if (categoryRepository.existsByUserIdAndName(user.getId(), dto.getName())) {
+                throw new BusinessException("Duplicate category name");
+            }
             category = modelMapper.map(dto, Category.class);
             category.setUserId(user.getId());
         }
