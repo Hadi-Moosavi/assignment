@@ -2,6 +2,7 @@ package com.pay.tracker.income.service;
 
 import com.pay.tracker.account.service.AccountService;
 import com.pay.tracker.category.persistance.Category;
+import com.pay.tracker.category.persistance.TransactionTypeEnum;
 import com.pay.tracker.category.service.CategoryService;
 import com.pay.tracker.commons.model.BusinessException;
 import com.pay.tracker.commons.model.User;
@@ -44,7 +45,11 @@ public class IncomeServiceImpl implements IncomeService {
         income.setDescription(dto.getDescription());
         income.setValue(dto.getValue());
         income.setDate(dto.getDate() == null ? LocalDateTime.now() : dto.getDate());
-        income.setCategory(categoryService.getAndCheckCategory(dto.getCategoryId(), user));
+        Category category = categoryService.getAndCheckCategory(dto.getCategoryId(), user);
+        if (category.getType() != TransactionTypeEnum.INCOME) {
+            throw new BusinessException("Selected category type is not for incomes");
+        }
+        income.setCategory(category);
         income.setAccount(accountService.getAndCheckAccount(dto.getAccountId(), user));
         Income savedModel = incomeRepository.save(income);
         return modelMapper.map(savedModel, IncomeResponseDTO.class);
