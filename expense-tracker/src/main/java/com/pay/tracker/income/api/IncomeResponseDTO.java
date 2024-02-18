@@ -1,9 +1,7 @@
-package com.pay.tracker.income.persistance;
+package com.pay.tracker.income.api;
 
 import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.category.persistance.Category;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,18 +9,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "incomes")
-public class Income {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class IncomeResponseDTO {
     private Long id;
     private Long userId;
-    @ManyToOne
-    @JoinColumn(name = "account_id")
     private Account account;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
     private Long value;
     private String description;
