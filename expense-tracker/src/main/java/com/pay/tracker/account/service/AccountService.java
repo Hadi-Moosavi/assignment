@@ -12,5 +12,5 @@ public interface AccountService {
 
     List<AccountDTO> getUserAccounts(User user);
 
-    Boolean deactivateAccount(Long id, User user);
+    void deactivateAccount(Long id, User user);
 }

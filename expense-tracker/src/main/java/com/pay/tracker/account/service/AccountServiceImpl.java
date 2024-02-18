@@ -3,15 +3,15 @@ package com.pay.tracker.account.service;
 import com.pay.tracker.account.api.AccountDTO;
 import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.account.persistance.AccountRepository;
-import com.pay.tracker.commons.model.ErrorException;
+import com.pay.tracker.commons.model.BusinessException;
 import com.pay.tracker.commons.model.User;
-import io.swagger.v3.oas.annotations.servers.Server;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Server
+@Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
@@ -39,13 +39,7 @@ public class AccountServiceImpl implements AccountService {
 
     private Account findAndUpdateAccount(AccountDTO dto, User user) {
         Account account;
-        account = accountRepository.findById(dto.getId()).orElseThrow(() -> new ErrorException("Entity not found."));
-        if (!user.getId().equals(account.getUserId())) {
-            throw new ErrorException("Account not belong to user");
-        }
-        if (!account.getActive()) {
-            throw new ErrorException("Account is not active");
-        }
+        account = getAndCheckAccount(dto.getId(), user);
         account.setName(dto.getName());
         account.setInitialBalance(dto.getInitialBalance());
         return account;
@@ -53,16 +47,33 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO getAccount(Long id, User user) {
-        return null;
+        return modelMapper.map(getAndCheckAccount(id, user), AccountDTO.class);
     }
 
     @Override
     public List<AccountDTO> getUserAccounts(User user) {
-        return null;
+        return accountRepository.getAccountByUserIdOrderByIdAsc(user.getId()).stream()
+                .map(a->modelMapper.map(a,AccountDTO.class))
+                .toList();
     }
 
     @Override
-    public Boolean deactivateAccount(Long id, User user) {
-        return null;
+    @Transactional
+    public void deactivateAccount(Long id, User user) {
+        var account = getAndCheckAccount(id, user);
+        account.setActive(false);
+        accountRepository.save(account);
+    }
+
+    private Account getAndCheckAccount(Long id, User user) {
+        Account account;
+        account = accountRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
+        if (!user.getId().equals(account.getUserId())) {
+            throw new BusinessException("Account not belong to user");
+        }
+        if (!account.getActive()) {
+            throw new BusinessException("Account is not active");
+        }
+        return account;
     }
 }
