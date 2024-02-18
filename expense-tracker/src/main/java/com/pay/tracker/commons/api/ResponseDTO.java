@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ResponseDTO<R> implements Serializable {
+    @Schema(description = "Response object when request is successfully and has response")
     private R response;
     @Schema(description = "Info, warning or error text")
     private String text;

@@ -27,11 +27,10 @@ public class AccountController extends AbstractController {
 
     @Operation(summary = "Get account by id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found the record",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))}),
-            @ApiResponse(responseCode = "401", description = "Invalid token"),
-            @ApiResponse(responseCode = "406", description = "Business exception happened"),
-
+            @ApiResponse(responseCode = "200", description = "Found the record", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
+            @ApiResponse(responseCode = "406", description = "Business exception happened",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))}),
     })
     @GetMapping(path = "/{id}")
     public ResponseDTO<AccountDTO> getAccount(@PathVariable Long id) {
@@ -39,18 +38,34 @@ public class AccountController extends AbstractController {
     }
 
     @Operation(summary = "Get all of user accounts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
+    })
     @GetMapping
     public ResponseDTO<List<AccountDTO>> getAccounts() {
         return new ResponseDTO<>(accountService.getUserAccounts(getUser()));
     }
 
     @Operation(summary = "Save new or update existing account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
+            @ApiResponse(responseCode = "406", description = "Business exception happened",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))}),
+    })
     @PostMapping
     public ResponseDTO<AccountDTO> saveAccount(@RequestBody @Validated AccountDTO dto) {
         return new ResponseDTO<>(accountService.saveAccount(dto, getUser()));
     }
 
     @Operation(summary = "Deactivate account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
+            @ApiResponse(responseCode = "406", description = "Business exception happened",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))}),
+    })
     @PutMapping(path = "/{id}")
     public ResponseDTO<Void> deactivateAccount(@PathVariable Long id) {
         accountService.deactivateAccount(id, getUser());
