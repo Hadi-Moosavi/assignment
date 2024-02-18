@@ -38,13 +38,13 @@ public class CategoryController extends AbstractController {
         return new ResponseDTO<>(categoryService.getCategory(id, getUser()));
     }
 
-    @Operation(summary = "Get all of user's categories")
+    @Operation(summary = "Get all of user's categories by transaction type")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
     })
     @GetMapping
-    public ResponseDTO<List<CategoryResponseDTO>> getCategories(@RequestParam @NotNull byte transactionType) {
+    public ResponseDTO<List<CategoryResponseDTO>> getCategories(@RequestParam byte transactionType) {
         return new ResponseDTO<>(categoryService.getUserCategories(transactionType, getUser()));
     }
 

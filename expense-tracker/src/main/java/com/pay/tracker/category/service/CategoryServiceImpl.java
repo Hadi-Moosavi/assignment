@@ -31,7 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
         return category;
     }
 
-    private Category getAndCheckCategory(Long id, User user) {
+    @Override
+    public Category getAndCheckCategory(Long id, User user) {
         Category category;
         category = categoryRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
         if (!user.getId().equals(category.getUserId())) {
