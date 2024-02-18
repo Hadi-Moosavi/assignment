@@ -1,9 +1,9 @@
-package com.pay.tracker.income.persistance;
+package com.pay.tracker.transaction.persistance;
 
 import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.category.persistance.Category;
+import com.pay.tracker.category.persistance.TransactionTypeEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "incomes")
-public class Income {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,5 +27,5 @@ public class Income {
     private Long amount;
     private String description;
     private LocalDateTime date;
-
+    private TransactionTypeEnum type;
 }

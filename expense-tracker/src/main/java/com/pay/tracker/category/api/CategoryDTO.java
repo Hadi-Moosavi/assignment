@@ -22,5 +22,6 @@ public class CategoryDTO {
     @Schema(description = "Transaction type, 1: income, 2: expense", example = "1", minimum = "1", maximum = "2")
     @Min(1)
     @Min(2)
+    @NotNull
     private Byte transactionTypeCode;
 }

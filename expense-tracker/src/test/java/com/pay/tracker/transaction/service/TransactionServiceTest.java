@@ -1,4 +1,4 @@
-package com.pay.tracker.income.service;
+package com.pay.tracker.transaction.service;
 
 import com.pay.tracker.account.api.AccountDTO;
 import com.pay.tracker.account.service.AccountService;
@@ -7,8 +7,8 @@ import com.pay.tracker.category.api.CategoryResponseDTO;
 import com.pay.tracker.category.persistance.TransactionTypeEnum;
 import com.pay.tracker.category.service.CategoryService;
 import com.pay.tracker.commons.model.User;
-import com.pay.tracker.income.api.IncomeDTO;
-import com.pay.tracker.income.api.IncomeResponseDTO;
+import com.pay.tracker.transaction.api.TransactionDTO;
+import com.pay.tracker.transaction.api.TransactionResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class IncomeServiceTest {
+class TransactionServiceTest {
 
     @Autowired
-    private IncomeService incomeService;
+    private TransactionService transactionService;
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -51,17 +51,18 @@ class IncomeServiceTest {
 
     @Test
     void saveIncomeAndRetrieve() {
-        IncomeDTO dto = new IncomeDTO();
+        TransactionDTO dto = new TransactionDTO();
         dto.setCategoryId(categoryResponseDTO.getId());
         dto.setDescription("test");
         dto.setAmount(1000L);
         dto.setAccountId(accountResponse.getId());
-        IncomeResponseDTO incomeResponseDTO = incomeService.saveIncome(dto, user);
-        assertNotNull(incomeResponseDTO);
-        assertEquals(1000L, incomeResponseDTO.getAmount());
+        dto.setTransactionTypeCode(TransactionTypeEnum.INCOME.getCode());
+        TransactionResponseDTO transactionResponseDTO = transactionService.saveTransaction(dto, user);
+        assertNotNull(transactionResponseDTO);
+        assertEquals(1000L, transactionResponseDTO.getAmount());
 
 
-        List<IncomeResponseDTO> userIncomes = incomeService.getUserIncomes(categoryResponseDTO.getId(),
+        List<TransactionResponseDTO> userIncomes = transactionService.getUserTransactions(categoryResponseDTO.getId(),
                 LocalDateTime.now().minusHours(1), LocalDateTime.now(), user);
         assertEquals(1, userIncomes.size());
     }
