@@ -1,6 +1,5 @@
 package com.pay.tracker.transaction.service;
 
-import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.account.service.AccountService;
 import com.pay.tracker.category.persistance.Category;
 import com.pay.tracker.category.persistance.TransactionTypeEnum;
@@ -77,6 +76,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private static TransactionTypeEnum getAndCheckTransType(Byte typeCode) {
+        if (typeCode == null)
+            return null;
         var type = TransactionTypeEnum.getByCode(typeCode);
         if (type == null) {
             throw new BusinessException("Invalid typeCode");

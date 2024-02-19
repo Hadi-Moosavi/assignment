@@ -7,18 +7,30 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class CategoryResponseDTO {
     @Schema(description = "Category Id", example = "1")
     private Long id;
 
-    @Schema(description = "User Id")
-    private Long userId;
-
     @Schema(description = "Category Name", example = "Groceries")
     private String name;
 
     @Schema(description = "Transaction type")
     private TransactionTypeEnum type;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CategoryResponseDTO that = (CategoryResponseDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
