@@ -51,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setType(TransactionTypeEnum.getByCode(dto.getTransactionTypeCode()));
         Category category = categoryService.getAndCheckCategory(dto.getCategoryId(), user);
         if (category.getType() != transaction.getType()) {
-            throw new BusinessException("Selected category type does not match transaction type");
+            throw new BusinessException("trans.category.mismatch");
         }
         transaction.setCategory(category);
         transaction.setAccount(accountService.getAndCheckAccount(dto.getAccountId(), user));
@@ -80,16 +80,16 @@ public class TransactionServiceImpl implements TransactionService {
             return null;
         var type = TransactionTypeEnum.getByCode(typeCode);
         if (type == null) {
-            throw new BusinessException("Invalid typeCode");
+            throw new BusinessException("invalid.type");
         }
         return type;
     }
 
     private Transaction getAndCheckTransaction(Long id, User user) {
         Transaction transaction;
-        transaction = transactionsRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
+        transaction = transactionsRepository.findById(id).orElseThrow(() -> new BusinessException("entity.not.found"));
         if (!user.getId().equals(transaction.getUserId())) {
-            throw new BusinessException("Transaction not belong to user");
+            throw new BusinessException("trans.user.mismatch");
         }
         return transaction;
     }

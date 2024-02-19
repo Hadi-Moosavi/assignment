@@ -16,7 +16,7 @@ public class UserSecurityContext {
         var name = (String) claims.get("preferred_username");
         var id = (Long) claims.get("user-id");
         if (name == null || id == null) {
-            throw new BusinessException("Invalid user info");
+            throw new BusinessException("invalid.user.info");
         } else return new User(id, name);
     }
 
@@ -25,7 +25,7 @@ public class UserSecurityContext {
         try {
             authentication = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         } catch (Exception ex) {
-            throw new BusinessException("Invalid token");
+            throw new BusinessException("invalid.token");
         }
         return authentication;
     }

@@ -34,9 +34,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getAndCheckCategory(Long id, User user) {
         Category category;
-        category = categoryRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
+        category = categoryRepository.findById(id).orElseThrow(() -> new BusinessException("entity.not.found"));
         if (!user.getId().equals(category.getUserId())) {
-            throw new BusinessException("Category not belong to user");
+            throw new BusinessException("category.user.mismatch");
         }
         return category;
     }
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
             category = findAndUpdateCategory(dto, user);
         } else {
             if (categoryRepository.existsByUserIdAndName(user.getId(), dto.getName())) {
-                throw new BusinessException("Duplicate category name");
+                throw new BusinessException("category.duplicate");
             }
             category = modelMapper.map(dto, Category.class);
             category.setUserId(user.getId());

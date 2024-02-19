@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
             account = findAndUpdateAccount(dto, user);
         } else {
             if (accountRepository.existsByUserIdAndName(user.getId(), dto.getName())) {
-                throw new BusinessException("Duplicate category name");
+                throw new BusinessException("account.duplicate");
             }
             account = modelMapper.map(dto, Account.class);
             account.setUserId(user.getId());
@@ -71,12 +71,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAndCheckAccount(Long id, User user) {
         Account account;
-        account = accountRepository.findById(id).orElseThrow(() -> new BusinessException("Entity not found."));
+        account = accountRepository.findById(id).orElseThrow(() -> new BusinessException("entity.not.found"));
         if (!user.getId().equals(account.getUserId())) {
-            throw new BusinessException("Account not belong to user");
+            throw new BusinessException("account.user.mismatch");
         }
         if (!account.getActive()) {
-            throw new BusinessException("Account is not active");
+            throw new BusinessException("account.in.active");
         }
         return account;
     }
