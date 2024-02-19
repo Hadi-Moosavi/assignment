@@ -1,0 +1,32 @@
+version: '2'
+services:
+  auth-server:
+    container_name: auth-server
+    build:
+      context: auth-server
+      dockerfile: Dockerfile
+    image: auth-server:latest
+    ports:
+      - 6003:6003
+    networks:
+      - expense-network
+    restart: always
+  expense-tracker:
+    container_name: expense-tracker
+    build:
+      context: expense-tracker
+      dockerfile: Dockerfile
+    image: expense-tracker:latest
+    ports:
+      - 6002:6002
+    networks:
+      - expense-network
+    environment:
+      - spring.security.oauth2.client.provider.keycloak.issuer-uri=http://auth-server:6003/auth/realms/assignment
+      - spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://auth-server:6003/auth/realms/assignment/protocol/openid-connect/certs
+    restart: always
+    depends_on:
+      - auth-server
+networks:
+  expense-network:
+    driver: bridge
