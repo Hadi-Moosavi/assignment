@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class ToLocalDateTimeConverter extends JsonDeserializer<LocalDateTime> implements Converter<String, LocalDateTime> {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
