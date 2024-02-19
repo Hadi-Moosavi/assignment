@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,8 +61,10 @@ class TransactionServiceTest {
         assertEquals(1000L, transactionResponseDTO.getAmount());
 
 
-        List<TransactionResponseDTO> userIncomes = transactionService.getUserTransactions(LocalDateTime.now().minusHours(1), LocalDateTime.now(), categoryResponseDTO.getId(),
-                user);
+        var from = LocalDateTime.now().minusHours(1);
+        var to = LocalDateTime.now();
+        var userIncomes = transactionService.filter(from, to, TransactionTypeEnum.INCOME.getCode(),
+                categoryResponseDTO.getId(), user);
         assertEquals(1, userIncomes.size());
     }
 }

@@ -67,16 +67,20 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionResponseDTO> getUserTransactions(LocalDateTime from, LocalDateTime to, Long categoryId, User user) {
-        List<Transaction> res;
-        if (categoryId == null) {
-            res = transactionsRepository.findByUserIdAndDateBetween(user.getId(), from, to);
-        } else {
-            res = transactionsRepository.findByUserIdAndCategoryAndDateBetween(user.getId(), new Category(categoryId), from, to);
-        }
+    public List<TransactionResponseDTO> filter(LocalDateTime from, LocalDateTime to, Byte typeCode, Long categoryId, User user) {
+        var type = getAndCheckTransType(typeCode);
+        var res = transactionsRepository.filter(user.getId(), new Category(categoryId), type, from, to);
         return res.stream()
                 .map(a -> modelMapper.map(a, TransactionResponseDTO.class))
                 .toList();
+    }
+
+    private static TransactionTypeEnum getAndCheckTransType(Byte typeCode) {
+        var type = TransactionTypeEnum.getByCode(typeCode);
+        if (type == null) {
+            throw new BusinessException("Invalid typeCode");
+        }
+        return type;
     }
 
     private Transaction getAndCheckTransaction(Long id, User user) {

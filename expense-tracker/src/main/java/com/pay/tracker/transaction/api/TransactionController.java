@@ -45,12 +45,12 @@ public class TransactionController extends AbstractController {
             @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
     })
     @GetMapping
-    public ResponseDTO<List<TransactionResponseDTO>> getTransactions(
+    public ResponseDTO<List<TransactionResponseDTO>> filter(
             @Parameter(description = "date from (yyyy-MM-dd HH:mm:SS)") @RequestParam LocalDateTime from,
             @Parameter(description = "date to (yyyy-MM-dd HH:mm:SS)") @RequestParam LocalDateTime to,
             @Parameter(description = "category id") @RequestParam(required = false) Long categoryId,
             @Parameter(description = "transaction type code") @RequestParam(required = false) Byte type) {
-        return new ResponseDTO<>(transactionService.getUserTransactions(from, to, categoryId, getUser()));
+        return new ResponseDTO<>(transactionService.filter(from, to, type, categoryId, getUser()));
     }
 
     @Operation(summary = "Save new or update existing transaction")
