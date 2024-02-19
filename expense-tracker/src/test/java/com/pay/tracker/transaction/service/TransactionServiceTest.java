@@ -64,7 +64,13 @@ class TransactionServiceTest {
         var from = LocalDateTime.now().minusHours(1);
         var to = LocalDateTime.now();
         var trans = transactionService.filter(from, to, TransactionTypeEnum.INCOME.getCode(),
-                categoryResponseDTO.getId(), user);
+                categoryResponseDTO.getId(), accountResponse.getId(), user);
         assertEquals(1, trans.size());
+        trans = transactionService.filter(from, to, TransactionTypeEnum.INCOME.getCode(),
+                categoryResponseDTO.getId(), null, user);
+        assertEquals(1, trans.size());
+        trans = transactionService.filter(from, to, TransactionTypeEnum.INCOME.getCode(),
+                categoryResponseDTO.getId(), 2L, user);
+        assertEquals(0, trans.size());
     }
 }

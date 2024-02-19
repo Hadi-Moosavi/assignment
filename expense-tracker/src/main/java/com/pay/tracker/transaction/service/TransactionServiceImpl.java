@@ -1,5 +1,6 @@
 package com.pay.tracker.transaction.service;
 
+import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.account.service.AccountService;
 import com.pay.tracker.category.persistance.Category;
 import com.pay.tracker.category.persistance.TransactionTypeEnum;
@@ -67,9 +68,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionResponseDTO> filter(LocalDateTime from, LocalDateTime to, Byte typeCode, Long categoryId, User user) {
+    public List<TransactionResponseDTO> filter(LocalDateTime from, LocalDateTime to, Byte typeCode, Long categoryId, Long accountId, User user) {
         var type = getAndCheckTransType(typeCode);
-        var res = transactionsRepository.filter(user.getId(), new Category(categoryId), type, from, to);
+        var res = transactionsRepository.filter(user.getId(), from, to, type, categoryId, accountId);
         return res.stream()
                 .map(a -> modelMapper.map(a, TransactionResponseDTO.class))
                 .toList();
