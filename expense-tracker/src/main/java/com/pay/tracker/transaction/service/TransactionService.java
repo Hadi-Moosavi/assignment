@@ -12,5 +12,5 @@ public interface TransactionService {
 
     TransactionResponseDTO getTransaction(Long id, User user);
 
-    List<TransactionResponseDTO> getUserTransactions(Long categoryId, LocalDateTime dateFrom, LocalDateTime dateTo, User user);
+    List<TransactionResponseDTO> getUserTransactions(LocalDateTime from, LocalDateTime to, Long categoryId, User user);
 }

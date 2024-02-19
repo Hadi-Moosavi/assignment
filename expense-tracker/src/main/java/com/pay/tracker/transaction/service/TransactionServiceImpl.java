@@ -67,12 +67,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionResponseDTO> getUserTransactions(Long categoryId, LocalDateTime dateFrom, LocalDateTime dateTo, User user) {
+    public List<TransactionResponseDTO> getUserTransactions(LocalDateTime from, LocalDateTime to, Long categoryId, User user) {
         List<Transaction> res;
         if (categoryId == null) {
-            res = transactionsRepository.findByUserIdAndDateBetween(user.getId(), dateFrom, dateTo);
+            res = transactionsRepository.findByUserIdAndDateBetween(user.getId(), from, to);
         } else {
-            res = transactionsRepository.findByUserIdAndCategoryAndDateBetween(user.getId(), new Category(categoryId), dateFrom, dateTo);
+            res = transactionsRepository.findByUserIdAndCategoryAndDateBetween(user.getId(), new Category(categoryId), from, to);
         }
         return res.stream()
                 .map(a -> modelMapper.map(a, TransactionResponseDTO.class))

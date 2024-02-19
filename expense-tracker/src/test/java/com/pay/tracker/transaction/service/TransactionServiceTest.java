@@ -62,8 +62,8 @@ class TransactionServiceTest {
         assertEquals(1000L, transactionResponseDTO.getAmount());
 
 
-        List<TransactionResponseDTO> userIncomes = transactionService.getUserTransactions(categoryResponseDTO.getId(),
-                LocalDateTime.now().minusHours(1), LocalDateTime.now(), user);
+        List<TransactionResponseDTO> userIncomes = transactionService.getUserTransactions(LocalDateTime.now().minusHours(1), LocalDateTime.now(), categoryResponseDTO.getId(),
+                user);
         assertEquals(1, userIncomes.size());
     }
 }

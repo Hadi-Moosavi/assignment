@@ -4,6 +4,7 @@ import com.pay.tracker.commons.api.AbstractController;
 import com.pay.tracker.commons.api.ResponseDTO;
 import com.pay.tracker.transaction.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,10 +45,12 @@ public class TransactionController extends AbstractController {
             @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
     })
     @GetMapping
-    public ResponseDTO<List<TransactionResponseDTO>> getTransactions(@RequestParam(required = false) Long categoryId,
-                                                                @RequestParam LocalDateTime dateFrom,
-                                                                @RequestParam LocalDateTime dateTo) {
-        return new ResponseDTO<>(transactionService.getUserTransactions(categoryId, dateFrom, dateTo, getUser()));
+    public ResponseDTO<List<TransactionResponseDTO>> getTransactions(
+            @Parameter(description = "date from (yyyy-MM-dd HH:mm:SS)") @RequestParam LocalDateTime from,
+            @Parameter(description = "date to (yyyy-MM-dd HH:mm:SS)") @RequestParam LocalDateTime to,
+            @Parameter(description = "category id") @RequestParam(required = false) Long categoryId,
+            @Parameter(description = "transaction type code") @RequestParam(required = false) Byte type) {
+        return new ResponseDTO<>(transactionService.getUserTransactions(from, to, categoryId, getUser()));
     }
 
     @Operation(summary = "Save new or update existing transaction")
