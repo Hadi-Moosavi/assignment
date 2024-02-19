@@ -39,7 +39,7 @@ public class TransactionController extends AbstractController {
         return new ResponseDTO<>(transactionService.getTransaction(id, getUser()));
     }
 
-    @Operation(summary = "Get user transactions by category and date")
+    @Operation(summary = "Filter user transactions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
