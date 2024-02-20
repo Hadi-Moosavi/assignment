@@ -50,7 +50,7 @@ curl --location --request POST 'http://localhost:6003/auth/realms/assignment/pro
 ```
 then use the access token in the authorization header of the request to `expense tracker service`.
 
-To access swagger ui go to this URL in your browser: [localhost:6002/swagger-ui.html](localhost:6002/swagger-ui.html)
+To access swagger ui go to this URL in your browser: [http://localhost:6002/swagger-ui.html](http://localhost:6002/swagger-ui.html)
 
 ## How It Works
 In `AccountController`, user can add, modify, or deactivate his account. get the list of accounts and also get account's
