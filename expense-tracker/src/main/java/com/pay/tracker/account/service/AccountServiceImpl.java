@@ -1,24 +1,31 @@
 package com.pay.tracker.account.service;
 
 import com.pay.tracker.account.api.AccountDTO;
+import com.pay.tracker.account.api.AccountBalanceDTO;
 import com.pay.tracker.account.persistance.Account;
 import com.pay.tracker.account.persistance.AccountRepository;
 import com.pay.tracker.commons.model.BusinessException;
 import com.pay.tracker.commons.model.User;
+import com.pay.tracker.transaction.persistance.Transaction;
+import com.pay.tracker.transaction.persistance.TransactionsRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.pay.tracker.category.persistance.TransactionTypeEnum.INCOME;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final TransactionsRepository transactionsRepository;
     private final ModelMapper modelMapper;
 
-    public AccountServiceImpl(AccountRepository accountRepository, ModelMapper modelMapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, TransactionsRepository transactionsRepository, ModelMapper modelMapper) {
         this.accountRepository = accountRepository;
+        this.transactionsRepository = transactionsRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -49,14 +56,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO getAccount(Long id, User user) {
-        return modelMapper.map(getAndCheckAccount(id, user), AccountDTO.class);
+    public AccountBalanceDTO getAccountBalance(Long id, User user) {
+        var account = getAndCheckAccount(id, user);
+        return new AccountBalanceDTO(account.getId(), account.getName(),
+                account.getInitialBalance() + getTotalBalance(id));
+    }
+
+    private Long getTotalBalance(Long accId) {
+        List<Transaction> trans = transactionsRepository.getByAccount_Id(accId);
+        return trans.stream().mapToLong(t -> t.getType() == INCOME ? t.getAmount() : -t.getAmount()).sum();
     }
 
     @Override
     public List<AccountDTO> getUserAccounts(User user) {
         return accountRepository.getAccountByUserIdOrderByIdAsc(user.getId()).stream()
-                .map(a->modelMapper.map(a,AccountDTO.class))
+                .map(a -> modelMapper.map(a, AccountDTO.class))
                 .toList();
     }
 

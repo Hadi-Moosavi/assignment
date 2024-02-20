@@ -17,4 +17,5 @@ public interface TransactionsRepository extends JpaRepository<Transaction, Long>
             "and (:type is null or t.type = :type) and (:categoryId is null or t.category.id = :categoryId) and (:accountId is null or t.account.id = :accountId) " +
             "order by t.date desc")
     List<Transaction> filter(Long userId, LocalDateTime from, LocalDateTime to, TransactionTypeEnum type, Long categoryId, Long accountId);
+    List<Transaction> getByAccount_Id(Long accountId);
 }

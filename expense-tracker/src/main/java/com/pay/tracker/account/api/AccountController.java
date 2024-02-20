@@ -25,7 +25,7 @@ public class AccountController extends AbstractController {
         this.accountService = accountService;
     }
 
-    @Operation(summary = "Get account by id")
+    @Operation(summary = "Get account's current balance")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the record", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "401", description = "Invalid token", content = @Content),
@@ -33,8 +33,8 @@ public class AccountController extends AbstractController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))}),
     })
     @GetMapping(path = "/{id}")
-    public ResponseDTO<AccountDTO> getAccount(@PathVariable Long id) {
-        return new ResponseDTO<>(accountService.getAccount(id, getUser()));
+    public ResponseDTO<AccountBalanceDTO> getAccountInfo(@PathVariable Long id) {
+        return new ResponseDTO<>(accountService.getAccountBalance(id, getUser()));
     }
 
     @Operation(summary = "Get all of user accounts")
